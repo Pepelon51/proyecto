@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model reports {
+  idreport     Int            @id @default(autoincrement())
+  requesteName String         @db.VarChar(150)
+  proyect      String         @db.VarChar(60)
+  department   String         @db.VarChar(100)
+  incidence    String         @db.VarChar(150)
+  description  String         @db.VarChar(500)
+  status       reports_status @default(OPEN)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+}
+
+model user {
+  iduser    Int      @id @default(autoincrement())
+  user      String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  position  String   @db.VarChar(255)
+  name      String   @db.VarChar(100)
+  proyect   String   @db.VarChar(60)
+  role      String   @db.VarChar(60)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+enum reports_status {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
