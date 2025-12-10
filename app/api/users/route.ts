@@ -17,9 +17,11 @@ export async function POST(request: NextRequest) {
     if(!validation.success)
         return NextResponse.json(validation.error, {status: 400});
 
-    const newUser = await prisma.user.create({
+    const newUser = await prisma.users.create({
         data: {user: body.user, password: body.password, position: body.position, name: body.name, proyect: body.proyect, role: body.role}
     });
+
+    return NextResponse.json(newUser, {status:201});
 
 }
 
