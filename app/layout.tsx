@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Theme>
+        <Theme style={{backgroundColor:"#F9F9F9"}}>
         <NavBar/>
          {children}
         </Theme>

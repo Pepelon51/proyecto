@@ -12,9 +12,10 @@ model reports {
   requesteName String         @db.Text
   proyect      String         @db.Text
   department   String         @db.Text
-  incidence    String         @db.Text
+  priority     String         @db.Text
   description  String         @db.Text
   status       reports_status @default(OPEN)
+  solveBy      String         @db.Text
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
