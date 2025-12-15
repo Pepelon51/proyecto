@@ -10,11 +10,13 @@ import { usePathname } from 'next/navigation'
 const NavBar = () =>{
     const currentPath = usePathname();
     const links = [
+        { label: 'Reports', href: '/reports'},
+        { label: 'Dashboard', href: '/dashboard'},
         { label: 'Login', href: './login'}
     ]
 
   return (
-    <nav className='flex space-x-8 border-b shadow-2xs border-zinc-300 mb-10 px-7 h-14 items-center bg bg-blend-color' style={{color:'#F9F9F9'}}>
+    <nav className='flex space-x-8 border-b shadow-2xs border-zinc-300 mb-10 px-7 h-14 items-center bg bg-blend-color'>
         <Link href="./"> <Image src={xinyaLogo} alt='logo' width={120} height={40}/> </Link>
         <ul className='flex space-x-6'>
             {links.map(link => 
@@ -22,8 +24,8 @@ const NavBar = () =>{
                 key={link.href} 
                 className={ classnames ({
                     'text-zinc-500' : link.href === currentPath,
-                    '#F9F9F9' : link.href !==  currentPath,
-                    'hover:#F9F9F9 transition-colors': true   
+                    'text-zinc-950' : link.href !==  currentPath,
+                    'hover:text-zinc-500 transition-colors': true   
                 })} 
                 href={link.href}>{link.label}
             </Link>)}

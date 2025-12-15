@@ -15,8 +15,8 @@ export default function page() {
                 <Image className='contain-content' style={{margin:"3px"}}src={xinyaLogo} alt='logo' width={240} height={80}/>
                 <p className="font-light" style={{ fontSize:"20px", textAlign:"center", marginTop:"4vh"}}>Iniciar sesión</p>
                 <div>
-                  <TextField.Root style={{textAlign:"center", margin:"10px"}} placeholder="E-mail"></TextField.Root>
-                  <TextField.Root style={{textAlign:"center", margin:"10px"}} placeholder="Password"></TextField.Root>
+                  <TextField.Root required type='email' style={{textAlign:"center", margin:"10px"}} placeholder="E-mail"></TextField.Root>
+                  <TextField.Root required type='password'style={{textAlign:"center", margin:"10px"}} placeholder="Password"></TextField.Root>
                   <div style={{textAlign:"center", margin:"5px"}}><Button className="border-x-indigo-600" style={{fontSize:"1.5vh"}}>LOGIN</Button></div>
                 </div>
 	    </Container>
