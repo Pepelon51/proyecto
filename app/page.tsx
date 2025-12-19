@@ -1,7 +1,6 @@
 'use client'
 import { Box, Button, Flex } from '@radix-ui/themes'
 import Link from 'next/link'
-import React from 'react'
 import animationData from './animations/mantenimiento.json'
 import Lottie from 'lottie-react'
 
