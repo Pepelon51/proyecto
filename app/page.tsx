@@ -11,14 +11,14 @@ const TicketsPage = () => {
       display: "flex", 
       alignItems:"center", 
       justifyContent:"center", 
-      minHeight: "calc(100vh - 120px)" // Resta la altura del navbar (ajusta según tu navbar)
+      minHeight: "calc(80vh - 120px)" // Resta la altura del navbar (ajusta según tu navbar)
     }}>
       <Box className="shadow-2xl" style={{
         background: "white", 
         borderRadius: "var(--radius-5)",
         padding: "40px"
       }}>
-        <Flex direction="column" gap="4" align="center">
+        <Flex direction="column" gap="3" align="center">
           <Lottie 
             animationData={animationData} 
             loop={true} 

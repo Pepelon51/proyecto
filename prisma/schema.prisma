@@ -9,13 +9,13 @@ datasource db {
 
 model reports {
   idreport     Int            @id @default(autoincrement())
-  requesteName String         @db.Text
+  requestName String         @db.Text
   proyect      String         @db.Text
   department   String         @db.Text
   priority     String         @db.Text
   description  String         @db.Text
   status       reports_status @default(OPEN)
-  solveBy      String         @db.Text
+  solvedBy      String         @db.Text
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
