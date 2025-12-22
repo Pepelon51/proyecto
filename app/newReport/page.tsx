@@ -1,10 +1,17 @@
 'use client'
-import { AlertDialog, Box, Button, Container, Flex, SegmentedControl, Strong, Text, TextArea, TextField } from '@radix-ui/themes'
+import { AlertDialog, Box, Button, Callout, Container, Flex, SegmentedControl, Spinner, Strong, Text, TextArea, TextField } from '@radix-ui/themes'
 import Link from 'next/link'
 import { useForm, Controller } from "react-hook-form" 
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { zodResolver} from '@hookform/resolvers/zod'
+import { createReportSchema } from '../validationSchemas'
+import { z } from 'zod'
+import ErrorMessage from '../components/ErrorMessage'
+import SpinnerComponent from '../components/Spinner'
+
+type ticketForm = z.infer<typeof createReportSchema>;
 
 interface ReportForm{
   requestName: string;
@@ -16,27 +23,40 @@ interface ReportForm{
 
 const newReportPage = () => {
   const router = useRouter();
-  const {register, handleSubmit, control} = useForm<ReportForm>();
+  const {register, handleSubmit, control, formState: {errors} } = useForm<ReportForm>({
+    resolver: zodResolver(createReportSchema)}
+  );
   const [reportId, setReportId] = useState<number | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState('')
+  const [isSubmitting, setSubmitting] = useState(false);
 
+ 
   const onSubmit = async (data: ReportForm) => {
     try {
+      setSubmitting(true);
       const response = await axios.post('/api/tickets', data);
       setReportId(response.data.idreport);
       setShowSuccess(true);
     } catch (error) {
+      setSubmitting(false);
       console.error('Error al crear el ticket:', error);
-      alert('Hubo un error al crear el ticket');
+      setError('Ocurrió un error insesperado');
+
     }
   };
 
   return (
     <>
-      <form 
-        className="max-w-l" 
-        onSubmit={handleSubmit(onSubmit)} 
-        style={{ marginTop: "10vh", display: "flex", alignItems: "center", justifyContent: "center"}}>
+    <div>
+      {error && <Callout.Root className="max-w-l" color='red' style={{display:'flex', alignItems:'center', justifyContent:'center',alignContent:'center'}}>
+        <Callout.Text>{error}</Callout.Text>
+      </Callout.Root>}
+      <form
+        className="max-w-l"
+        onSubmit={handleSubmit(onSubmit)}
+        style={{ marginTop: "10vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+>
        
         <Box className="shadow-2xl" style={{ background: "white", borderRadius: "var(--radius-5)", margin: '' }}>
           <Container size="1" style={{ margin: "55px" }}>
@@ -59,8 +79,11 @@ const newReportPage = () => {
             />
             
             <TextField.Root size='2' style={{ marginTop: '10px' }} placeholder='Nombre de quien reporta...' {...register('requestName')} />
+            <ErrorMessage>{errors.requestName?.message}</ErrorMessage>
             <TextField.Root size='2' style={{ marginTop: '10px' }} placeholder='Departamento...' {...register('department')} />
+            <ErrorMessage>{errors.department?.message}</ErrorMessage>
             <TextArea size='2' style={{ marginTop: '10px' }} placeholder='Descripción del problema...' {...register('description')} />
+            <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
             <div style={{ marginBottom: '10px', marginLeft: '5px', marginTop: '10px' }}>
               <Text>Nivel de urgencia:</Text>
@@ -78,7 +101,7 @@ const newReportPage = () => {
               }
             />
             
-            <Box style={{ marginTop: '15px' }}>
+            <Box style={{ marginTop: '15px', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
                   <Button type="button" color="red">Cancelar</Button>
@@ -105,7 +128,7 @@ const newReportPage = () => {
                   </Flex>
                 </AlertDialog.Content>
               </AlertDialog.Root>
-              <Button type="submit" style={{ marginLeft: '300px' }} size="2" color='grass'>Enviar</Button>
+              <Button disabled={isSubmitting} type="submit" style={{ marginLeft: '300px' }} size="2" color='grass'>Enviar {isSubmitting &&<SpinnerComponent/>}</Button>
             </Box>
           </Container>
         </Box>
@@ -135,6 +158,7 @@ const newReportPage = () => {
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
+      </div>
     </>
   )
 }

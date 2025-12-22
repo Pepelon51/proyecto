@@ -22,12 +22,12 @@ const newReportPage = () => {
 
   const onSubmit = async (data: ReportForm) => {
     try {
-      const response = await axios.post('/api/tickets', data);
+      const response = await axios.get('/api/tickets', data);
       setReportId(response.data.idreport);
       setShowSuccess(true);
     } catch (error) {
-      console.error('Error al crear el ticket:', error);
-      alert('Hubo un error al crear el ticket');
+      console.error('Error al consultar tu ticket:', error);
+      alert('Error al consultar tu ticket');
     }
   };
 
