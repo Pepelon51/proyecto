@@ -1,5 +1,5 @@
 'use client'
-import { AlertDialog, Box, Button, Callout, Container, Flex, SegmentedControl, Spinner, Strong, Text, TextArea, TextField } from '@radix-ui/themes'
+import { AlertDialog, Box, Button, Callout, Container, Flex, SegmentedControl, Strong, Text, TextArea, TextField } from '@radix-ui/themes'
 import Link from 'next/link'
 import { useForm, Controller } from "react-hook-form" 
 import axios from 'axios'
@@ -55,10 +55,9 @@ const newReportPage = () => {
       <form
         className="max-w-l"
         onSubmit={handleSubmit(onSubmit)}
-        style={{ marginTop: "10vh", display: "flex", alignItems: "center", justifyContent: "center" }}
->
+        style={{ marginTop: "10vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
        
-        <Box className="shadow-2xl" style={{ background: "white", borderRadius: "var(--radius-5)", margin: '' }}>
+        <Box className="shadow-2xl" style={{ background: "white", borderRadius: "var(--radius-5)"}}>
           <Container size="1" style={{ margin: "55px" }}>
             <Text style={{display:'flex'}}size={'5'}><Strong>Generar Ticket</Strong></Text>
             <Box py="1" />
