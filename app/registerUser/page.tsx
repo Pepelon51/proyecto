@@ -1,10 +1,13 @@
 'use client'
-import { createUserSchema } from '@/app/api/users/createUserSchema';
+import SpinnerComponent from '@/app/components/Spinner';
+import { createUserSchema } from '@/app/createUserSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertDialog, Box, Button, Container, Flex, Link, SegmentedControl, Strong, Text, TextField } from '@radix-ui/themes'
+import { AlertDialog, Box, Button, Flex, Link, SegmentedControl, Strong, Text, TextField } from '@radix-ui/themes'
 import axios from 'axios';
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 interface registerForm{
   user: string;
@@ -112,8 +115,23 @@ const RegisterUser = () => {
                 </SegmentedControl.Root>
               }
             />
-            {errors.proyect && <Text size="1" color="red">{errors.proyect.message}</Text>}
-
+            <Controller 
+              name="role" 
+              control={control} 
+              defaultValue="Helper"
+              render={({field}) => 
+                <SegmentedControl.Root 
+                  size='1' 
+                  radius="full" 
+                  value={field.value} 
+                  onValueChange={field.onChange}
+                  style={{width: '100%'}}
+                >
+                  <SegmentedControl.Item value="Admin">Admin</SegmentedControl.Item>
+                  <SegmentedControl.Item value="Helper">Helper</SegmentedControl.Item>
+                </SegmentedControl.Root>
+              }
+            />
             <Flex gap="3" justify="center" style={{ marginTop: '1rem' }}>
               <AlertDialog.Root>
                 <AlertDialog.Trigger>
@@ -149,7 +167,7 @@ const RegisterUser = () => {
                 color="grass"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Registrando...' : 'Registrar'}
+                Registrar {isSubmitting&&<SpinnerComponent/>}
               </Button>
             </Flex>
           </div>
@@ -172,8 +190,7 @@ const RegisterUser = () => {
                 onClick={() => {
                   setShowSuccess(false);
                   window.location.href = './';
-                }}
-              >
+                }}>
                 Aceptar
               </Button>
             </AlertDialog.Action>

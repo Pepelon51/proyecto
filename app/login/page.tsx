@@ -4,60 +4,132 @@ import xinyaLogo from '../images/xinya-logo.png'
 import Image from 'next/image'
 import ErrorMessage from '../components/ErrorMessage'
 import { useForm } from 'react-hook-form'
-import axios from 'axios'
 import { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import SpinnerComponent from '../components/Spinner'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface LoginForm{
   user: string;
   password: string;
 }
 
-
 const Login = () => {
-
-  const {register, handleSubmit, control } = useForm<LoginForm>();
-  const { formState: {errors}} = useForm<LoginForm>();
+  const router = useRouter();
+  const {register, handleSubmit, formState: {errors}} = useForm<LoginForm>();
   const [isSubmitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('')
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState('');
+
   const onSubmit = async (data: LoginForm) => {
     try {
       setSubmitting(true);
-      const response = await axios.post('/api/users', data);
-      setShowSuccess(true);
+      setError('');
+      
+      console.log('Intentando login con:', data.user);
+      
+      const res = await signIn('credentials', {
+        user: data.user,
+        password: data.password,
+        redirect: false // IMPORTANTE: mantener en false para manejar la respuesta
+      });
+      
+      console.log('Respuesta de signIn:', res);
+      
+      if (res?.error) {
+        console.error('Error de autenticación:', res.error);
+        setError('Usuario o contraseña incorrectos');
+        setSubmitting(false);
+        return;
+      }
+      
+      if (res?.ok) {
+        console.log('Login exitoso, redirigiendo...');
+        router.push('/dashboard'); // O la ruta que quieras
+      }
+      
     } catch (error) {
+      console.error('Error en catch:', error);
+      setError('Ocurrió un error inesperado');
       setSubmitting(false);
-      console.error('Error: ', error);
-      setError('Ocurrió un error insesperado');
-
     }
   };
 
   return (
-    <div  className="max-w-l" style={{marginTop:"15vh",display: "flex", alignItems:"center", justifyContent:"center"}}>   
-    <form onSubmit={handleSubmit(onSubmit)}>
-    <Box className="shadow-2xl"style={{background: "white", borderRadius: "var(--radius-5)"}}>
-	    <Container size="1" style={{margin:"35px" }}>
-			    <Box py="1" />
-                <Image className='contain-content' style={{margin:"3px"}}src={xinyaLogo} alt='logo' width={240} height={80}/>
-                <p className="font-light" style={{ fontSize:"20px", textAlign:"center", marginTop:"4vh"}}>Iniciar sesión</p>
-                <div>
-                  <TextField.Root required type='email' style={{textAlign:"center", margin:"10px"}} placeholder="User"></TextField.Root>
-                  <ErrorMessage>{errors.user?.message}</ErrorMessage>
-                  <TextField.Root required type='password'style={{textAlign:"center", margin:"10px"}} placeholder="Password"></TextField.Root>
-                  <ErrorMessage>{errors.user?.message}</ErrorMessage>
-                  <Box style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type="submit" className="border-x-indigo-600" style={{fontSize:"1.8vh"}}>LOGIN</Button>
-                  </Box>
-                </div>
-                
-	    </Container>
-    </Box>
-    </form>
+    <div className="max-w-l" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>   
+      <form
+        className="max-w-l"
+        onSubmit={handleSubmit(onSubmit)}
+        style={{ marginTop: "4vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Box 
+          className="shadow-2xl"
+          style={{background: "white", borderRadius: "var(--radius-5)"}}
+        >
+          <Container size="1" style={{ margin: "55px" }}>
+            <Image 
+              className='contain-content' 
+              style={{margin:"3px"}}
+              src={xinyaLogo} 
+              alt='logo' 
+              width={240} 
+              height={80}
+            />
+            <p className="font-light" style={{ fontSize:"20px", textAlign:"center", marginTop:"4vh"}}>
+              Iniciar sesión
+            </p>
+            
+            {error && (
+              <Box style={{ 
+                padding: '10px', 
+                backgroundColor: '#fee', 
+                borderRadius: '5px', 
+                marginBottom: '1rem',
+                color: 'red',
+                textAlign: 'center'
+              }}>
+                {error}
+              </Box>
+            )}
+            
+            <div>
+              <TextField.Root 
+                required 
+                type='text' 
+                style={{textAlign:"center", margin:"10px"}} 
+                placeholder="User" 
+                {...register('user')}
+              />
+              <ErrorMessage>{errors.user?.message}</ErrorMessage>
+              
+              <TextField.Root 
+                required 
+                type='password'
+                style={{textAlign:"center", margin:"10px"}} 
+                placeholder="Password" 
+                {...register('password')}
+              />
+              <ErrorMessage>{errors.password?.message}</ErrorMessage>
+              
+              <Box style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <Button 
+                  disabled={isSubmitting} 
+                  type="submit" 
+                  className="border-x-indigo-600" 
+                  style={{fontSize:"1.8vh"}}
+                >
+                  {isSubmitting ? (
+                    <>Ingresando... <SpinnerComponent/></>
+                  ) : (
+                    'LOGIN'
+                  )}
+                </Button>
+              </Box>
+            </div>
+          </Container>
+        </Box>
+      </form>
     </div>
   )
 }
-
 
 export default Login

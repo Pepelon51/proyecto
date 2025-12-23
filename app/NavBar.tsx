@@ -10,7 +10,7 @@ import { usePathname } from 'next/navigation'
 const NavBar = () =>{
     const currentPath = usePathname();
     const links = [
-        { label: 'Login', href: './login'}
+        { label: 'Login', href: './login' },
     ]
 
   return (
