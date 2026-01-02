@@ -1,0 +1,19 @@
+{
+  "sidebarItems": [
+    {
+      "name": "Inicio",
+      "href": "/dashboard",
+      "icon": "home"
+    },
+    {
+      "name": "Reportes",
+      "href": "/reports",
+      "icon": "clipboard"
+    },
+    {
+      "name": "Usuarios",
+      "href": "/registerUser",
+      "icon": "users"
+    }
+  ]
+}

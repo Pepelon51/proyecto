@@ -6,8 +6,9 @@ import { AlertDialog, Box, Button, Flex, Link, SegmentedControl, Strong, Text, T
 import axios from 'axios';
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import Sidebar from '../components/Sidebar';
+import UsersTable from '../components/UsersTable';
+
 
 interface registerForm{
   user: string;
@@ -41,11 +42,14 @@ const RegisterUser = () => {
   };
       
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    
+    <div style={{ minHeight: '70vh', display: '-ms-grid', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      
       <form 
         className="w-full max-w-md"
         onSubmit={handleSubmit(onSubmit)}
-        style={{ width: '100%' }}
+        style={{ width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto'
+         }}
       >
         <Box 
           className="shadow-2xl" 
@@ -100,7 +104,7 @@ const RegisterUser = () => {
             <Controller 
               name="proyect" 
               control={control} 
-              defaultValue="Xinya LatinAmerica"
+              defaultValue="Xinya Latin America"
               render={({field}) => 
                 <SegmentedControl.Root 
                   size='1' 
@@ -109,7 +113,7 @@ const RegisterUser = () => {
                   onValueChange={field.onChange}
                   style={{width: '100%'}}
                 >
-                  <SegmentedControl.Item value="Xinya LatinAmerica">Xinya LatinAmerica</SegmentedControl.Item>
+                  <SegmentedControl.Item value="Xinya Latin America">Xinya Latin America</SegmentedControl.Item>
                   <SegmentedControl.Item value="Xinya Green Power">Xinya Green Power</SegmentedControl.Item>
                   <SegmentedControl.Item value="American Industries">American Industries</SegmentedControl.Item>
                 </SegmentedControl.Root>
@@ -174,6 +178,8 @@ const RegisterUser = () => {
         </Box>
       </form>
 
+      
+
       {/* AlertDialog de éxito */}
       <AlertDialog.Root open={showSuccess} onOpenChange={setShowSuccess}>
         <AlertDialog.Content maxWidth="450px">
@@ -189,7 +195,7 @@ const RegisterUser = () => {
                 color="green"
                 onClick={() => {
                   setShowSuccess(false);
-                  window.location.href = './';
+                  window.location.href = '/dashboard';
                 }}>
                 Aceptar
               </Button>
@@ -197,6 +203,9 @@ const RegisterUser = () => {
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
+      <Box style={{marginTop:'7vh'}}>
+      <UsersTable/>
+      </Box>
     </div>
   )
 }
