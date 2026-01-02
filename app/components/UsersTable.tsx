@@ -170,9 +170,9 @@ const UsersTable = ({ onEdit, onDelete }: UsersTableProps) => {
                         Usuarios Registrados ({users.length})
                     </Heading>
                     <Flex direction="column" gap="4">
-                        <Box>
-                            <Table.Root variant="surface">
-                                <Table.Header>
+                        <Box style={{backgroundColor:'white'}}>
+                            <Table.Root className='shadow-2xl rounded-2xl' variant="surface">
+                                <Table.Header className='bg-zinc-400'>
                                     <Table.Row>
                                         <Table.ColumnHeaderCell>Nombre</Table.ColumnHeaderCell>
                                         <Table.ColumnHeaderCell>Usuario</Table.ColumnHeaderCell>
