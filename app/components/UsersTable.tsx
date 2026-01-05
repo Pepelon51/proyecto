@@ -172,7 +172,7 @@ const UsersTable = ({ onEdit, onDelete }: UsersTableProps) => {
                     <Flex direction="column" gap="4">
                         <Box style={{backgroundColor:'white'}}>
                             <Table.Root className='shadow-2xl rounded-2xl' variant="surface">
-                                <Table.Header className='bg-zinc-400'>
+                                <Table.Header className='bg-zinc-400' style={{textAlign:'center'}}>
                                     <Table.Row>
                                         <Table.ColumnHeaderCell>Nombre</Table.ColumnHeaderCell>
                                         <Table.ColumnHeaderCell>Usuario</Table.ColumnHeaderCell>
@@ -185,7 +185,7 @@ const UsersTable = ({ onEdit, onDelete }: UsersTableProps) => {
                                     </Table.Row>
                                 </Table.Header>
 
-                                <Table.Body>
+                                <Table.Body style={{textAlign:'center'}}>
                                     {users.map((user) => (
                                         <Table.Row key={user.iduser}>
                                             <Table.RowHeaderCell>
@@ -207,7 +207,7 @@ const UsersTable = ({ onEdit, onDelete }: UsersTableProps) => {
                                                     <div style={{ color: '#666' }}>{formatTime(user.updatedAt)}</div>
                                                 </div>
                                             </Table.Cell>
-                                            <Table.Cell>
+                                            <Table.Cell >
                                                 <Flex gap="2">
                                                     <Button
                                                         size="1"
