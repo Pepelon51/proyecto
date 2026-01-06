@@ -14,7 +14,7 @@ const NavBar = () =>{
     ]
 
   return (
-    <nav className='flex space-x-8 border-b shadow-2xs border-zinc-300 mb-10 px-7 h-14 items-center bg bg-blend-color' style={{background:'#F9F9F9', color:'#F9F9F9'}}>
+    <nav className='flex space-x-8 border-b shadow-2xs border-zinc-300 px-7 h-14 items-center bg bg-blend-color' style={{background:'#F9F9F9', color:'#F9F9F9'}}>
         <Link href="./"> <Image src={xinyaLogo} alt='logo' width={120} height={40}/> </Link>
         <ul className='flex space-x-6'>
             {links.map(link => 

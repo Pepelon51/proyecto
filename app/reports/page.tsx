@@ -1,12 +1,15 @@
 'use client'
-import { Badge, Box, Button, Container, Dialog, Flex, SegmentedControl, Select, Strong, Table, Text, TextArea, TextField } from '@radix-ui/themes';
+import { AlertDialog, Badge, Box, Button, Container, Dialog, Flex, SegmentedControl, Select, Strong, Table, Text, TextArea, TextField } from '@radix-ui/themes';
 import { formatDate } from 'date-fns';
 import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
-import { report } from 'process';
+import Image from 'next/image';
+import warningImage from '@/app/images/warning.png'
+import { useSession } from 'next-auth/react';
+
 
 interface Report {
     idreport: number;
@@ -38,9 +41,14 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReport, setEditingReport] = useState<Report | null>(null);
+    // Estados para el AlertDialog de confirmación de eliminación
+    const [userToDelete, setUserToDelete] = useState<Report | null>(null);
+    const { data: session } = useSession();
 
 
-    const fetchUsers = async () => {
+    const currentUserName = session?.user?.name;
+
+    const fetchReports = async () => {
         try {
             setLoading(true);
             const response = await fetch('/api/tickets');
@@ -53,7 +61,7 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
         }
     };
     useEffect(() => {
-        fetchUsers();
+        fetchReports();
     }, []);
 
     // Función que se llama al hacer click en el botón de eliminar
@@ -85,7 +93,7 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
             setSuccessMessage('Ticket eliminado exitosamente');
             setShowSuccessAlert(true);
 
-            fetchUsers();
+            fetchReports();
             if (onDelete) onDelete(reportToDelete.idreport);
         } catch (error) {
             console.error('Error deleting report:', error);
@@ -158,12 +166,17 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
         if (!editingReport) return;
 
         try {
-            const response = await fetch(`/api/reports/${editingReport.idreport}`, {
+            const updateData = {
+                ...data,
+                ...(data.status === 'CLOSED' && currentUserName && {solvedBy: currentUserName}),
+                ...(data.status !== 'CLOSED' && { solvedBy: null })
+            };
+            const response = await fetch(`/api/tickets/${editingReport.idreport}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(updateData),
             });
 
             const result = await response.json();
@@ -178,7 +191,7 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
             setSuccessMessage('Reporte actualizado exitosamente');
             setShowSuccessAlert(true);
 
-            fetchUsers();
+            fetchReports();
             if (onEdit) onEdit(result);
         } catch (error) {
             console.error('Error updating user:', error);
@@ -189,13 +202,13 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
 
     return (
         <>
-            <div className="flex justify-center items-center">
-                <div className="max-h-lh">
+            <div className="flex justify-center items-center mt-15 bg-">
+                <div className="max-h-lh mb-15">
                     <Box className="shadow-2xl bg-white rounded-lg" style={{ marginBottom: '20vh' }}>
                         <div className="p-5 text-center">
                             <h3><strong>Reportes</strong></h3>
                         </div>
-                        <Box style={{ marginInline: '20vh', marginBottom: '20vh' }}>
+                        <Box style={{ marginInline: '15vh', marginBottom: '20vh', paddingBottom:'7vh' }}>
                             <Table.Root variant="surface">
                                 <Table.Header style={{ textAlign: 'center' }}>
                                     <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
@@ -207,7 +220,7 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
                                     <Table.ColumnHeaderCell>Acciones</Table.ColumnHeaderCell>
 
                                 </Table.Header>
-                                <Table.Body style={{ textAlign: 'center' }}>
+                                <Table.Body className='mb-15' style={{ textAlign: 'center' }}>
                                     {reports.map((report) => (
                                         <Table.Row key={report.idreport}>
                                             <Table.RowHeaderCell>
@@ -384,6 +397,46 @@ const Reports = ({ onEdit, onDelete }: ReportsTableProps) => {
                     </form>
                 </Dialog.Content>
             </Dialog.Root>
+
+            {/* AlertDialog de Confirmación de Eliminación */}
+            <AlertDialog.Root open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                <AlertDialog.Content maxWidth="450px">
+                    <AlertDialog.Title style={{ display: 'flex', alignContent: 'normal', alignItems: 'center' }}>
+                        <Image src={warningImage} alt="Warning" width={28} height={28} style={{ marginRight: '8px' }} />Confirmar eliminación
+
+                    </AlertDialog.Title>
+                    <AlertDialog.Description size="3">
+                        ¿Estás seguro de eliminar el ticket #  <strong>{reportToDelete?.idreport}</strong>?
+                        <br />
+                        Esta acción no se puede deshacer.
+                    </AlertDialog.Description>
+
+                    <Flex gap="3" mt="4" justify="end">
+                        <AlertDialog.Cancel>
+                            <Button
+                                variant="soft"
+                                color="gray"
+                                onClick={() => {
+                                    setShowDeleteConfirm(false);
+                                    setReportToDelete(null);
+                                }}
+                            >
+                                Cancelar
+                            </Button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action>
+                            <Button
+                                variant="solid"
+                                color="red"
+                                onClick={confirmDelete}
+                            >
+                                Sí, eliminar
+                            </Button>
+                        </AlertDialog.Action>
+                    </Flex>
+                </AlertDialog.Content>
+            </AlertDialog.Root>
+
         </>
     )
 }

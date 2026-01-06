@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "./NavBar";
 import Sidebar from './components/Sidebar';
+import { Providers } from '@/app/provider' // ← Importa aquí
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,14 +29,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
-      <body className='bg-amber-500'>
-        
-        
-        <Theme style={{backgroundColor:"#F9F9F9"}}> 
-        <NavBar/>
-         {children}
-        </Theme>
+
+      <body style={{backgroundColor:'#F9F9F9'}}>
+
+        <Providers>
+          <Theme style={{ backgroundColor: "#F9F9F9" }}>
+            <NavBar />
+
+            {children}
+
+          </Theme>
+        </Providers>
       </body>
     </html>
   );

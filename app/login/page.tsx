@@ -55,11 +55,11 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-l" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>   
+    <div className="max-w-l mt-15" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>   
       <form
         className="max-w-l"
         onSubmit={handleSubmit(onSubmit)}
-        style={{ marginTop: "4vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box 
           className="shadow-2xl"

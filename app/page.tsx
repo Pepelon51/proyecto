@@ -6,7 +6,7 @@ import Lottie from 'lottie-react'
 
 const TicketsPage = () => {
   return (
-    <div className="max-w-l" style={{
+    <div className="max-w-l mt-15" style={{
       display: "flex", 
       alignItems:"center", 
       justifyContent:"center", 
