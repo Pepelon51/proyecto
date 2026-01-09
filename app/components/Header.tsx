@@ -20,7 +20,7 @@ const Header = () => {
   const currentUserName = session?.user?.name;
   return (
     
-    <header className='bg-[#ebeefe] shadow-2xl  border-[#1f1f1f] mx-4 sm:mx-6 lg:mx-8 mt-4 mb-2 rounded-lg'>
+    <header className='bg-[#ebeefe] shadow-2xl  border-[#1f1f1f] mx-4 sm:mx-6 lg:mx-8 mt-2 mb-2 rounded-lg'>
       <div className='max-w-7xl mx-auto py-4 px-4 sm:px-6 flex item-center justify-between'>
         <h1 className='text-lg sm:text-xl lg:text-2xl font-semibold'>
           Dashboard

@@ -26,7 +26,9 @@ export default async function proxy(request: NextRequest) {
     '/_next',
     '/favicon.ico',
     '/images',
-    '/fonts'
+    '/fonts',
+    '/viewReport',
+    '/newReport'
   ]
   
   const isPublicPath = publicPaths.some(path => 

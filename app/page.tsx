@@ -24,10 +24,10 @@ const TicketsPage = () => {
             autoplay={true} 
             style={{width:'200px', height: '200px'}}
           />
-          <Link href="./newReport">
+          <Link href="/newReport">
             <Button size="4" style={{width: '250px'}}>Generar ticket</Button>
           </Link>
-          <Link href="./viewReport">
+          <Link href="/viewReport">
             <Button size="4" style={{width: '250px'}}>Consultar ticket</Button>
           </Link>
         </Flex>
