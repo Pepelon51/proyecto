@@ -137,35 +137,6 @@ const RegisterUser = () => {
               }
             />
             <Flex gap="3" justify="center" style={{ marginTop: '1rem' }}>
-              <AlertDialog.Root>
-                <AlertDialog.Trigger>
-                  <Button type="button" color="red" variant="soft">
-                    Cancelar
-                  </Button>
-                </AlertDialog.Trigger>
-                <AlertDialog.Content maxWidth="450px">
-                  <AlertDialog.Title>Cancelar registro</AlertDialog.Title>
-                  <AlertDialog.Description size="2">
-                    ¿Estás seguro? Cancelar eliminará tu registro
-                  </AlertDialog.Description>
-
-                  <Flex gap="3" mt="4" justify="end">
-                    <AlertDialog.Cancel>
-                      <Button variant="soft" color="gray">
-                        No, no estoy seguro
-                      </Button>
-                    </AlertDialog.Cancel>
-                    <AlertDialog.Action>
-                      <Link href="./">
-                        <Button variant="solid" color="red">
-                          Sí, estoy seguro
-                        </Button>
-                      </Link>
-                    </AlertDialog.Action>
-                  </Flex>
-                </AlertDialog.Content>
-              </AlertDialog.Root>
-              
               <Button 
                 type="submit" 
                 color="grass"

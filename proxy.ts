@@ -9,7 +9,18 @@ export default async function proxy(request: NextRequest) {
     secureCookie: process.env.NODE_ENV === "production",
   })
 
+  const response = NextResponse.next()
+
   const { pathname } = request.nextUrl
+
+    if (pathname === '/') {
+    const response = NextResponse.next()
+    response.cookies.delete('next-auth.session-token')
+    response.cookies.delete('__Secure-next-auth.session-token')
+    response.cookies.delete('next-auth.csrf-token')
+    response.cookies.delete('__Secure-next-auth.csrf-token')
+    return response
+  }
 
   console.log('=== PROXY DEBUG ===')
   console.log('Ruta:', pathname)
@@ -30,8 +41,8 @@ export default async function proxy(request: NextRequest) {
     '/viewReport',
     '/newReport'
   ]
-  
-  const isPublicPath = publicPaths.some(path => 
+
+  const isPublicPath = publicPaths.some(path =>
     pathname === path || pathname.startsWith(path + '/')
   )
 
@@ -59,6 +70,7 @@ export default async function proxy(request: NextRequest) {
 
   console.log('✅ Acceso permitido a ruta protegida')
   return NextResponse.next()
+
 }
 
 export const config = {
